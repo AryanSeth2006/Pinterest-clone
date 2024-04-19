@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pinterest</title>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  
+  <link rel="stylesheet" href="../stylesheets/feed.css">
+  
+</head>
+<body>
+  <% if (nav == true) { %>
+    <div class="header mt-0 flex justify-between items-center w-full px-2 py-2 font-sans sticky top-0 z-40 pb-10 mb-0 bg-white" style="margin-top: 0;">
+      <a href="/profile">
+        <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/pinterest-round-color-icon.png"  class="icon pinterest-icon h-8 w-8">
+
+      </a>
+
+      <!-- Display the user's profile image -->
+
+      <ul class="navigation flex items-center">
+        <a href="/feed" class="px-4 text-lg cursor-pointer hover:bg-gray-800 hover:text-white rounded-lg">Home</a>
+        <a href="/explore" class="px-4 text-lg cursor-pointer hover:bg-gray-800 hover:text-white rounded-lg">Explore</a>
+        <a href="/add" class="px-4 text-lg cursor-pointer hover:bg-gray-800 hover:text-white rounded-lg">Create</a>
+      </ul>
+      <a href="/search" class="search-bar flex items-center w-1/2 bg-gray-300 rounded-full px-4 py-2">
+        <img src="../images/search.png" class="search-icon h-6 w-6">
+        <input type="text" placeholder="Search" class="w-full bg-transparent outline-none">
+      </a>
+      <% if (user && user.profileImage) { %>
+        <div class="user-profile-image">
+          <a href="/profile">
+            <img src="/images/uploads/<%= user.profileImage %>" alt="Profile Image" class="rounded-full w-12 h-12 ">
+
+          </a>
+        </div>
+      <% } %>
+      <a href="/logout">
+        <button type="button" class="btn text-white btn-red px-5 py-2 pl-px-5 bg-red-600">Logout</button>
+      </a>
+    </div>
+
+  <% } %>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get the current path from the URL
+      const currentPath = window.location.pathname;
+
+      // Function to set active link based on current path
+      function setActiveLink() {
+        const links = document.querySelectorAll('.navigation a');
+        links.forEach(link => {
+          const href = link.getAttribute('href');
+          if (href === currentPath) {
+            link.classList.add('active');
+          }
+          // Keep hover effect when on the current page
+          link.addEventListener('mouseenter', function() {
+            if (href === currentPath) {
+              link.classList.add('hover-active');
+            }
+          });
+          link.addEventListener('mouseleave', function() {
+            if (href === currentPath) {
+              link.classList.remove('hover-active');
+            }
+          });
+        });
+      }
+
+      // Call setActiveLink function when the page loads
+      setActiveLink();
+
+      // Add click event listener to the search icon
+      const searchIcon = document.querySelector('.search-icon');
+      searchIcon.addEventListener('click', function() {
+        // Redirect to the search placeholder location
+        window.location.href = '/search';
+      });
+    });
+  </script>
+</body>
+</html>

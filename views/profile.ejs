@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinterest</title>
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
+    <link rel="stylesheet" href="../stylesheets/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.7.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="..//stylesheets/profile.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <% include ./partials/header.ejs %>
+    <div class="profile w-full min-h-screen text-white bg-zinc-800 pt-1">
+        <form id="uploadform" hidden  action="/fileupload" method="post" enctype="multipart/form-data">
+            <input type="file" name="image" >
+        </form>
+        <div class="profdets flex flex-col items-center mt-20 ">
+            <div class="relative">
+                <span id="uploadicon" class="w-8 h-8 absolute bottom-0 right-0 rounded-full flex items-center justify-center bg-zinc-200 ">
+                    <i class="text-zinc-800 ri-pencil-line"></i>
+                 </span>
+                <div  class="w-32 h-32 bg-zinc-200 rounded-full overflow-hidden">
+                    <img class="w-full h-full object-cover" src="/images/uploads/<%= user.profileImage %>">
+                </div>
+            </div>
+            
+                <h1 class="text-3xl font-semibold"><%=user.fullname%></h1>
+                <h3 class="text-md">@<%=user.username%></h3>
+                <a href="/edit" class="px-7 mt-5 text-xs font-semibold py-2 bg-zinc-700 rounded-full">Edit</a>
+                
+       <a href="/add" class="px-10 py-2 rounded-lg bg-red-700 rounded-full text-xs font-semibold  mt-10">Add New Post </a>
+            </div>
+    
+            
+<div class="main-box-container">
+    <% user.posts.forEach(post => { %>
+
+    <div class="box-container gap-20">    
+    <img  src="/images/uploads/<%= post.image %>"  class=" img w-full h-full rounded-none">
+     <h3 class="text-xl font-semibold"><%= post.title %></h3>      
+      <p><%= post.description %>
+    </p>
+      
+    <div class=" h6 relative flex justify-start ">
+        <form id="deleteForm_<%= post._id %>" method="POST" action="/posts/<%= post._id %>/delete">
+            <button class="delete-button" onclick="confirmDelete(event, '<%= post._id %>')">
+                <!-- SVG icon for delete -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6 pb text-red-600">
+                    <path d="M21 6h-5V4.33A2.42 2.42 0 0 0 13.5 2h-3A2.42 2.42 0 0 0 8 4.33V6H3a1 1 0 0 0 0 2h1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8h1a1 1 0 0 0 0-2zM10 4.33c0-.16.21-.33.5-.33h3c.29 0 .5.17.5.33V6h-4zM18 19a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V8h12z"/>
+                </svg>
+            </button>
+        </form>
+    </div>
+
+    </div>
+    <% }) %>
+      </div>
+        </div>
+        
+    
+    <script>
+    document.querySelector("#uploadicon").addEventListener("click", function(){
+    document.querySelector("#uploadform input").click();
+    });
+    
+    document.querySelector("#uploadform input").addEventListener("change",function(){
+        document.querySelector("#uploadform").submit();
+    })
+    function confirmDelete(event, postId) {
+        event.preventDefault(); // Prevent default anchor behavior
+
+        // Display confirmation dialog before submitting the form
+        const confirmed = confirm('Are you sure you want to delete this post?');
+
+        if (confirmed) {
+            const formId = `deleteForm_${postId}`;
+            document.getElementById(formId).submit(); // Submit the form
+        }
+    }
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteButtons = document.querySelectorAll('.delete-button');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default button behavior (submit form)
+                const formId = button.closest('form').id;
+
+                // Display confirmation dialog before submitting the form
+                const confirmed = confirm('Are you sure you want to delete this post?');
+
+                if (confirmed) {
+                    document.getElementById(formId).submit(); // Submit the form
+                }
+            });
+        });
+    });
+
+
+    </script>
+
+<% include ./partials/footer.ejs %>
+</body>
+
+</html>

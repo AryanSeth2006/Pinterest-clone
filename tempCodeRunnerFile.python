@@ -1,0 +1,53 @@
+class Human:
+    def __init__(self, hair_color):
+        self.num_coats = 2
+        self.num_pants = 4
+        self.hair_color = hair_color
+
+    def eat(self):
+        print("I can eat")
+
+    def work(self):
+        print("I can work")
+
+
+class Male(Human):
+    def __init__(self, name):
+        super().__init__("Brown")  # Initialize hair color to a default value
+        self.name = name
+
+    def display(self):
+        print(f"Hi, I am {self.name} and my hair color is {self.hair_color}")
+
+
+class Female(Human):
+    def __init__(self, name, hair_color):
+        super().__init__(hair_color)
+        self.name = name
+        self.num_coats = 1  # Update the number of coats for females
+
+    def color(self):
+        print("Pink")
+
+    def work(self):
+        super().work()  # Call the work method from the parent class
+        print("I love to teach dance")
+
+    def display(self):
+        print(f"Hi, I am {self.name} and my hair color is {self.hair_color}")
+
+
+male_1 = Male("Dev")
+print("The name is", male_1.name)
+male_1.work()
+male_1.display()
+
+female_1 = Female("Arya", "Black")
+print("Name is", female_1.name)
+print("The number of coats is", female_1.num_coats)
+print("Hair color is", female_1.hair_color)
+female_1.work()
+female_1.display()
+
+# Method Resolution Order (MRO) for Female class
+print(Female.mro())
